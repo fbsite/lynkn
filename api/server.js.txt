@@ -1,0 +1,26 @@
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+const paymentLinks = {
+    monthly: process.env.STRIPE_PAYMENT_LINK_ID_MONTHLY,
+    annual: process.env.STRIPE_PAYMENT_LINK_ID_ANNUAL
+};
+
+app.post('/api/server', (req, res) => {
+    const { planType } = req.body;
+    const linkId = paymentLinks[planType];
+
+    if (!linkId) {
+        return res.status(400).json({ error: 'Tipo de plano inválido.' });
+    }
+
+    res.json({ url: `https://buy.stripe.com/${linkId}` });
+});
+
+// Exporta a app para a Vercel
+module.exports = app;
