@@ -11,15 +11,19 @@ const paymentLinks = {
     annual: process.env.STRIPE_PAYMENT_LINK_ID_ANNUAL
 };
 
+app.get('/api/health', (_req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
+
 app.post('/api/server', (req, res) => {
-    const { planType } = req.body;
+    const planType = String(req.body?.planType || '').toLowerCase().trim();
     const linkId = paymentLinks[planType];
 
-    if (!linkId) {
+    if (!planType || !linkId) {
         return res.status(400).json({ error: 'Tipo de plano inválido.' });
     }
 
-    res.json({ url: `https://buy.stripe.com/${linkId}` });
+    res.status(200).json({ url: `https://buy.stripe.com/${linkId}` });
 });
 
 // Exporta a app para a Vercel
