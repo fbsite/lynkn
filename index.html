@@ -887,12 +887,11 @@
                         return;
                     }
                     
-                    const serverUrl = 'http://lynk-one.vercel.app/'; // <-- ATUALIZE PARA O URL DO SEU SERVIDOR ONLINE
                     try {
-                        const response = await fetch(`${serverUrl}/create-checkout-link`, {
+                        const response = await fetch('/api/server', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ planType: planType })
+                            body: JSON.stringify({ planType })
                         });
 
                         if (!response.ok) {
